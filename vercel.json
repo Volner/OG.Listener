@@ -1,13 +1,10 @@
 {
   "$schema": "https://openapi.vercel.sh/vercel.json",
-  "framework": null,
-  "fluid": true,
-  "installCommand": "",
-  "buildCommand": "node scripts/prepare-vercel.mjs",
-  "outputDirectory": ".vercel-static",
+  "version": 2,
   "functions": {
     "api/index.js": {
-      "maxDuration": 300
+      "maxDuration": 300,
+      "runtime": "nodejs22.x"
     }
   },
   "rewrites": [
