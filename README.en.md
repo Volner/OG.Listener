@@ -1,5 +1,7 @@
 [Русский](README.md)
 
+![OG.Listener](docs/assets/readme-banner.svg)
+
 # OG.Listener
 
 Interactive analytics for your official Spotify listening history. Upload your ZIP or JSON file to explore your favorite tracks, artists, and how your taste in music has changed.
