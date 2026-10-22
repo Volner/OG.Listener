@@ -1,3 +1,5 @@
+[English](README.en.md)
+
 # OG.Listener
 
 Интерактивная аналитика официальной истории прослушиваний Spotify. Загрузите свой ZIP или JSON, чтобы исследовать любимые треки, исполнителей и то, как менялся ваш музыкальный вкус.
@@ -33,7 +35,7 @@ npm start
 
 ## GitHub Pages + Vercel API
 
-Интерфейс публикуется на GitHub Pages, API — как Node.js Function на Vercel. API получает обложки, жанры, аудио и историю аудитории; личный архив разбирается в браузере.
+Интерфейс публикуется на GitHub Pages, API — как Node.js Function на Vercel. API получает обложки, жанры, аудио и историю аудитории; личный архив разбирается в браузере. В корне Vercel открывается минимальная страница API со ссылкой на проверку `/healthz`; пользовательский интерфейс остаётся на Pages.
 
 1. Импортируйте репозиторий в Vercel. В проекте выберите **Other**, Node.js **24.x** и каталог с `vercel.json`. В окружении **Production** задайте `CORS_ORIGINS=https://username.github.io` — адрес интерфейса **без пути репозитория**. Для своего домена укажите его origin. Конфигурация Vercel уже задаёт сборку API; `npm start` и `API_ONLY` для неё не нужны. Production-адрес API должен открываться без авторизации Vercel.
 2. В репозитории GitHub откройте **Settings → Secrets and variables → Actions → Variables** и создайте переменную `VITE_API_BASE_URL` со значением `https://your-api.vercel.app`, **без `/api` и других путей**.
