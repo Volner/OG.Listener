@@ -1,0 +1,115 @@
+.filter-control {
+  display: inline-flex;
+  align-items: stretch;
+  min-height: 42px;
+  border: 1px solid #5d586b;
+  border-radius: 7px;
+  background: var(--surface);
+  color: var(--text);
+  white-space: nowrap;
+  transition: background-color 150ms ease-out, border-color 150ms ease-out;
+}
+
+.filter-control:hover {
+  border-color: #9183b4;
+}
+
+.filter-control--applied {
+  border-color: var(--accent);
+  color: #d4c5fb;
+}
+
+.filter-control > .filter-control__toggle {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  min-height: 40px;
+  padding: 9px 15px;
+  border-radius: 6px;
+  font-size: .875rem;
+  font-weight: 500;
+  line-height: 1.4;
+}
+
+.filter-control__toggle:hover,
+.filter-control__clear:hover {
+  background: var(--surface-hover);
+}
+
+.filter-control__count {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 20px;
+  height: 20px;
+  padding: 0 4px;
+  border-radius: 4px;
+  background: #514568;
+  color: #f5f0ff;
+  font-size: .75rem;
+  font-variant-numeric: tabular-nums;
+}
+
+.filter-control__clear-slot {
+  width: 0;
+  overflow: hidden;
+  opacity: 0;
+  pointer-events: none;
+  transition: width 180ms ease-out, opacity 150ms ease-out;
+}
+
+.filter-control:hover .filter-control__clear-slot,
+.filter-control:focus-within .filter-control__clear-slot {
+  width: 40px;
+  opacity: 1;
+  pointer-events: auto;
+}
+
+.filter-control__clear {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 40px;
+  height: 100%;
+  min-height: 40px;
+  padding: 0;
+  border-left: 1px solid var(--line);
+  border-radius: 0 6px 6px 0;
+  color: inherit;
+}
+
+.filter-control__toggle:focus-visible,
+.filter-control__clear:focus-visible {
+  outline-offset: -4px;
+}
+
+@media (max-width: 800px) {
+  .filter-control > .filter-control__toggle {
+    padding: 9px 11px;
+    font-size: .8125rem;
+  }
+}
+
+@media (max-width: 500px) {
+  .filter-control > .filter-control__toggle {
+    gap: 6px;
+    padding: 9px;
+    font-size: .75rem;
+  }
+}
+
+@media (hover: none), (pointer: coarse) {
+  .filter-control .filter-control__clear-slot {
+    width: 40px;
+    opacity: 1;
+    pointer-events: auto;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .filter-control,
+  .filter-control__clear-slot {
+    transition: none;
+  }
+}
