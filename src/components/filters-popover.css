@@ -1,0 +1,33 @@
+.filters-popover.library-filters{width:710px;max-width:calc(100vw - 48px);max-height:min(78dvh,740px);padding:20px;background:var(--surface);border-color:#575160;border-radius:12px;overscroll-behavior:contain;scrollbar-width:thin;scrollbar-color:#61566f transparent}
+.library-filters .popover-heading{margin-bottom:22px}
+.filters-columns{display:grid;grid-template-columns:minmax(0,1.08fr) minmax(0,1fr);gap:24px;align-items:start}
+.library-filters .filter-period{margin:0}
+.library-filters .filter-period>legend{padding:0;margin-bottom:16px}
+.filter-options{min-width:0;padding-left:24px;border-left:1px solid var(--line);display:flex;flex-direction:column;gap:23px}
+.library-filters .filter-options fieldset{margin:0}
+.library-filters .field select{background:var(--background);border-color:var(--input-line)}
+.library-filters .field-help{font-size:.6875rem;line-height:1.6;font-weight:400;color:var(--subtle);margin-top:0}
+.library-filters .genre-explanation{font-size:.6875rem;margin-top:9px}
+.library-filters .genre-explanation summary{color:var(--subtle)}
+.library-filters .filter-actions{margin-top:23px;padding-top:17px;border-top:1px solid var(--line);position:sticky;bottom:-20px;padding-bottom:1px;background:var(--surface);z-index:3}
+.play-count-range{min-width:0}
+.play-count-range-values{display:flex;justify-content:flex-end;gap:18px;font-size:.75rem;color:var(--muted);font-variant-numeric:tabular-nums;margin-bottom:8px}
+.play-count-range-values output{white-space:nowrap}
+.play-count-range-values strong{font-size:.875rem;color:var(--text);font-weight:500;margin-left:3px}
+.play-count-slider{height:40px;position:relative;touch-action:none}
+.play-count-rail{position:absolute;height:4px;left:10px;right:10px;top:18px;border-radius:3px;background:#403a4a;pointer-events:none}
+.play-count-rail>span{position:absolute;inset-block:0;border-radius:3px;background:var(--accent)}
+.play-count-slider .play-count-thumb{appearance:none;-webkit-appearance:none;position:absolute;inset:0;width:100%;height:40px;background:transparent;margin:0;padding:0;pointer-events:none;outline:none;border:0}
+.play-count-thumb::-webkit-slider-runnable-track{height:4px;background:transparent;border:0}
+.play-count-thumb::-moz-range-track{height:4px;background:transparent;border:0}
+.play-count-thumb::-webkit-slider-thumb{-webkit-appearance:none;appearance:none;width:20px;height:20px;margin-top:-8px;border:3px solid var(--surface);border-radius:50%;background:var(--accent);box-shadow:0 0 0 1px #b7a8ed70;cursor:grab;pointer-events:auto;transition:box-shadow 120ms ease-out}
+.play-count-thumb::-moz-range-thumb{width:14px;height:14px;border:3px solid var(--surface);border-radius:50%;background:var(--accent);box-shadow:0 0 0 1px #b7a8ed70;cursor:grab;pointer-events:auto}
+.play-count-thumb:focus-visible::-webkit-slider-thumb{box-shadow:0 0 0 3px #b7a8ed60}
+.play-count-thumb:focus-visible::-moz-range-thumb{box-shadow:0 0 0 3px #b7a8ed60}
+.play-count-thumb:active::-webkit-slider-thumb{cursor:grabbing;box-shadow:0 0 0 4px #b7a8ed28}
+.play-count-thumb-min{z-index:1}
+.play-count-thumb-max{z-index:2}
+.play-count-slider:has(.play-count-thumb-min:focus-visible) .play-count-thumb-min{z-index:3}
+.play-count-range-scale{display:flex;justify-content:space-between;padding:1px 2px 0;font-size:.6875rem;font-variant-numeric:tabular-nums;color:var(--subtle)}
+@media(max-width:760px){.filters-popover.library-filters{position:fixed;top:114px;right:12px;left:12px;width:auto;max-width:710px;max-height:calc(100dvh - 138px);margin-left:auto;padding:18px}.filters-columns{gap:20px}.filter-options{padding-left:20px}}
+@media(max-width:600px){.filters-popover.library-filters{top:112px;max-width:430px;max-height:calc(100dvh - 132px);padding:17px}.filters-columns{grid-template-columns:minmax(0,1fr);gap:23px}.filter-options{padding-left:0;padding-top:22px;border-left:0;border-top:1px solid var(--line);gap:21px}.library-filters .field select{font-size:16px}.library-filters .popover-heading{margin-bottom:17px}.library-filters .filter-actions{bottom:-17px;padding-bottom:2px}}

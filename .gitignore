@@ -1,0 +1,62 @@
+# Dependencies and generated output
+node_modules/
+dist/
+coverage/
+.vite/
+.cache/
+.vercel/
+.vercel-static/
+
+# Local configuration and credentials
+.env
+.env.*
+!.env.example
+.envrc
+.npmrc
+*.pem
+*.key
+*.p12
+*.pfx
+credentials*.json
+
+# Personal Spotify exports, legacy uploads and local backups
+upload/
+uploads/
+private-data/
+.local-data/
+StreamingHistory*.json
+Streaming_History_Audio*.json
+Streaming_History_Video*.json
+endsong*.json
+history.json
+catalog.json
+my_spotify_data*
+*.zip
+*.tar
+*.tar.gz
+*.tgz
+*.7z
+*.rar
+
+# Temporary checks, logs and editor / OS files
+.qa/
+test-results/
+playwright-report/
+*.log
+*.tmp
+*.temp
+*.bak
+*.orig
+*.tsbuildinfo
+__pycache__/
+*.py[cod]
+.idea/
+.vscode/
+.DS_Store
+Thumbs.db
+Desktop.ini
+*~
+*.swp
+
+# Previous hosting integration (not used by this project)
+.openai/
