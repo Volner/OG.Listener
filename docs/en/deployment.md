@@ -19,7 +19,7 @@ Import the GitHub repository into Vercel and configure the project:
 | Root Directory | The directory containing `package.json` and `vercel.json`; the repository root with the recommended layout |
 | Build Command, Output Directory, Install Command | Keep the configuration provided by `vercel.json` |
 
-[`vercel.json`](../../vercel.json) runs `node scripts/prepare-vercel.mjs` and exposes the API through `api/index.js`. The `.vercel-static` directory is intentionally empty: the frontend is built separately for Pages. Do not replace these settings with `npm run build` and `dist`. The server uses built-in Node.js modules, so installation of frontend dependencies is disabled on Vercel.
+[`vercel.json`](../../vercel.json) runs `node scripts/prepare-vercel.mjs` and exposes the API through `api/index.js`. The script creates a single `index.html` in `.vercel-static` with a minimal API page and a link to `/healthz`: Vercel does not accept an empty Output Directory. The frontend is built separately for Pages; source files, archives, and personal data are not copied into this directory. Do not replace these settings with `npm run build` and `dist`. The server uses built-in Node.js modules. The regular dependency installation step is skipped; the Node.js Function builder may install dependencies from `package.json` separately when packaging the function.
 
 Set the following Environment Variables for **Production**:
 
@@ -36,7 +36,7 @@ All variable names and request limit settings are listed in [`.env.example`](../
 
 The production API must be accessible to visitors **without signing in to Vercel**. If deployment protection is enabled, configure it so that the public production API is accessible; preview deployments can remain protected. Never put protection bypass tokens in the frontend. A successful `OPTIONS` response alone does not confirm that the actual request is accessible.
 
-After deployment, save the stable production origin, such as `https://your-api.vercel.app`. Open `/healthz` in a private window: the expected response is `{"ok":true}`. The root `/` does not host a frontend; a 404 there does not indicate a broken API. A health check confirms that the handler is reachable, not that every external provider is available.
+After deployment, save the stable production origin, such as `https://your-api.vercel.app`. Open `/healthz` in a private window: the expected response is `{"ok":true}`. This route checks the API handler; the static page at `/` does not confirm that it is working. A health check does not check every external provider.
 
 Vercel does not need `HOST`, `PORT`, `API_ONLY`, or `TRUST_PROXY`: the platform invokes the function directly. The adapter uses a validated IP from the platform header only when running in the Vercel environment.
 
@@ -44,9 +44,9 @@ Vercel does not need `HOST`, `PORT`, `API_ONLY`, or `TRUST_PROXY`: the platform 
 
 1. In GitHub, open **Settings → Secrets and variables → Actions → Variables**. Create a repository variable named `VITE_API_BASE_URL` containing the API's production origin, such as `https://your-api.vercel.app`. Do not include `/api`, other paths, parameters, or keys.
 2. In **Settings → Pages → Build and deployment → Source**, select **GitHub Actions**.
-3. Push to `main` or manually run the **Deploy to GitHub Pages** workflow from the Actions tab.
+3. Push to `main` or manually run the **Deploy OG.Listener to GitHub Pages** workflow from the Actions tab.
 
-[`pages.yml`](../../.github/workflows/pages.yml) installs dependencies with `npm ci`, runs tests and `npm run build:pages`, then publishes only `dist/`. It obtains the project path from `configure-pages`; a standard project Pages deployment needs no manual path changes. A missing or invalid `VITE_API_BASE_URL` causes the Pages build to fail before publishing.
+[`static.yml`](../../.github/workflows/static.yml) installs dependencies with `npm ci`, runs tests and `npm run build:pages`, then publishes only `dist/`. It obtains the project path from `configure-pages`; a standard project Pages deployment needs no manual path changes. A missing or invalid `VITE_API_BASE_URL` causes the Pages build to fail before publishing.
 
 Pages uses hash navigation: `https://username.github.io/OG.Listener/#/upload`. Reloading and browser Back/Forward work without server-side SPA redirects. Local development keeps the `/upload` route.
 

@@ -39,7 +39,7 @@ The frontend is published to GitHub Pages; the API runs as a Node.js Function on
 
 1. Import the repository into Vercel. Select **Other**, Node.js **24.x**, and the directory containing `vercel.json`. In the **Production** environment, set `CORS_ORIGINS=https://username.github.io`, using the frontend address **without the repository path**. For a custom domain, use its origin. The Vercel configuration already defines the API build; it does not need `npm start` or `API_ONLY`. The production API URL must be accessible without Vercel authentication.
 2. In your GitHub repository, open **Settings → Secrets and variables → Actions → Variables** and create a variable named `VITE_API_BASE_URL` with the value `https://your-api.vercel.app`, **without `/api` or any other path**.
-3. In **Settings → Pages → Build and deployment → Source**, select **GitHub Actions**. The [pages.yml](.github/workflows/pages.yml) workflow builds and publishes only `dist/` on pushes to `main` or when run manually.
+3. In **Settings → Pages → Build and deployment → Source**, select **GitHub Actions**. The [static.yml](.github/workflows/static.yml) workflow builds and publishes only `dist/` on pushes to `main` or when run manually.
 
 The repository path is handled automatically. On Pages, the upload screen uses `#/upload`, for example `https://username.github.io/OG.Listener/#/upload`; the local `/upload` route continues to work. Provider keys belong only on the API server: all `VITE_*` variables are public.
 

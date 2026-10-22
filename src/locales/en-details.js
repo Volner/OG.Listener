@@ -3,7 +3,6 @@ export default {
   '{count} ч музыки': '{count} h of music',
   '{count} прослушиваний': '{count} plays',
   'Прослушивания по месяцам. Стрелки влево и вправо выбирают месяц.': 'Monthly plays. Use the left and right arrow keys to select a month.',
-  'Наведите на любой участок графика · на телефоне — коснитесь': 'Hover anywhere on the chart · tap on mobile',
   'Рост аудитории': 'Audience growth',
   '{artist}. {count} архивных снимков. От {from} до {to}.': '{artist}. {count} archived snapshots. From {from} to {to}.',
   'Первое прослушивание: {date}.': 'First listen: {date}.',

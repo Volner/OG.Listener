@@ -8,7 +8,7 @@ Environment and CORS configuration are covered in [deployment](deployment.md). S
 
 | Method and path | Purpose |
 | --- | --- |
-| `POST /api/catalog/resolve` | Resolve metadata for a batch of 1–100 tracks |
+| `POST /api/catalog/resolve` | Resolve metadata for a batch of 1-100 tracks |
 | `GET /api/tracks/:id` | Resolve one track and search for available audio |
 | `GET /api/tracks?query=…` | Search an external catalog for candidates; returns `{ results, exactMatchRequired: true }` |
 | `GET`, `HEAD /api/artwork/:id` | 302 redirect to a known external artwork URL from the cache |
@@ -16,8 +16,8 @@ Environment and CORS configuration are covered in [deployment](deployment.md). S
 | `GET /api/audio/providers` | Audio sources and their configuration status |
 | `GET /api/catalog/providers` | Optional metadata provider status without exposing keys |
 | `GET /api/audience/providers` | Audience history sources and their limitations |
-| `POST /api/audience/resolve` | Verified audience observations for 1–100 artists |
-| `POST /api/audience/import` | A compatibility route for the same task, accepting 1–20 artists |
+| `POST /api/audience/resolve` | Verified audience observations for 1-100 artists |
+| `POST /api/audience/import` | A compatibility route for the same task, accepting 1-20 artists |
 | `GET /api/status` | Instance status: `{ ok, storage: "memory", mediaFiles: 0 }` |
 | `GET`, `HEAD /healthz` | Server handler availability; GET returns `{ "ok": true }` |
 

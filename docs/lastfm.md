@@ -1,61 +1,40 @@
-# Last.fm metadata
+# Интеграция с Last.fm
 
-Last.fm is an optional source of **community tags and recognized music styles**.
-It is not an audio provider or a source of historical Spotify monthly listeners.
+Last.fm дополняет жанры и теги треков. Интеграция необязательная: отсутствие ключа не мешает импортировать архив, смотреть статистику или использовать остальные источники обложек и аудио. Пользователю сайта не нужны аккаунт Last.fm, авторизация или включённый скробблинг.
 
-## Configuration
+## Настройка
 
-Obtain this application's own API key at <https://www.last.fm/api/account/create>
-and set `LASTFM_API_KEY` in `.env.local`, then restart the local server. Do not use
-the `VITE_` prefix: the key stays on the server. Visitors need no Last.fm account,
-login, installation, or separate API key. No API key is included in the project.
+Получите ключ приложения в [Last.fm API](https://www.last.fm/api/account/create) и задайте `LASTFM_API_KEY` в окружении серверного API. Для Vercel это Environment Variables проекта; после изменения требуется новое развёртывание. При локальной работе используйте игнорируемый `.env.local`, как описано в [инструкции по развёртыванию](deployment.md).
 
-`GET /api/catalog/providers` reports whether the application is configured. It
-does not expose the key. `configured: true` means a key was supplied, rather than
-a claim that Last.fm has accepted it or is currently available.
+Ключ не должен иметь префикс `VITE_`, попадать в GitHub Pages, браузерный код или коммиты. Браузер обращается к API OG.Listener, а запрос к Last.fm выполняется на сервере. `GET /api/catalog/providers` возвращает только состояние `configured` и возможности источника.
 
-## Lookup and genre rules
+## Используемые методы
 
-- `track.getInfo` is called only during metadata enrichment (`details: true`),
-  never for the fast cover request or the player request with `details: false`.
-- Autocorrection is disabled. The returned complete title and artist must match
-  after case/punctuation normalization. Live, remix, cover and other title
-  suffixes are preserved by that comparison.
-- `tags` contains the track's community annotations. Only exact entries in the
-  small recognized-style alias map become `genres`; personal labels, years,
-  countries, and moods remain tags. This mapping is deliberately conservative
-  and incomplete. It does not analyze audio or claim that all tags are genres.
-- When a verified track has no recognized genre tags, `artist.getInfo` supplies
-  a shared artist fallback. These are explicitly marked `genreScope: 'artist'`
-  and also retained in `artistTags`/`artistGenres`.
-- Existing album genres are preserved. `genreSources` keeps provenance and
-  `lastfmUrl` links to the matching Last.fm catalog page for attribution.
-- Only metadata is requested. Last.fm artwork, audio, biographies, listener
-  counts, and personal scrobble data are not fetched or imported.
+| Метод | Назначение |
+| --- | --- |
+| [`track.getInfo`](https://www.last.fm/api/show/track.getInfo) | Сопоставление песни по названию и исполнителю, получение `toptags` и ссылки на страницу трека |
+| [`artist.getInfo`](https://www.last.fm/api/show/artist.getInfo) | Получение тегов исполнителя, если теги найденного трека не дали подходящих музыкальных стилей |
 
-Metadata and negative results use bounded RAM caches with in-flight request
-deduplication. No media or Last.fm data is written to disk. Cache-Control
-`max-age`, `no-cache`, and `no-store` are respected, with a six-hour maximum.
-The default request spacing is 350 ms, an application setting rather than an
-official throughput promise. HTTP 429/API error 29 pauses requests and honors
-Retry-After; invalid/suspended keys pause for an hour. Other providers continue
-working if Last.fm is unavailable.
+Оба метода вызываются с `autocorrect=0`. Возвращённые имя исполнителя и название сверяются с запросом после нормализации регистра, диакритики, пунктуации и пробелов. Несовпадающий результат отклоняется. Вызовы `track.getTopTags` и `artist.getTopTags` в текущем коде не используются.
 
-## What the API does not solve
+Теги сообщества сохраняются как `tags`, а резервные теги исполнителя - как `artistTags`. Жанрами становятся только значения из ограниченного словаря известных музыкальных стилей. Например, `rnb` нормализуется в `R&B`, а страны и личные пометки не объявляются жанрами автоматически.
 
-`artist.getInfo` statistics belong to Last.fm, rather than Spotify's rolling
-monthly audience. `user.getWeeklyArtistChart` is one user's listening chart, not
-a historical count of an artist's Spotify listeners. Neither is mixed into the
-app's Spotify audience-growth coefficient. The old Radio API is deprecated and
-cannot provide a free full-song catalog. Audio continues to use the app's
-separate playback providers.
+Метаданные содержат происхождение жанра и его область: трек или исполнитель. Жанры Last.fm могут дополнять данные других каталогов. Если у трека нет подходящих тегов, резервный жанр исполнителя характеризует его музыку в целом и может быть неточным для отдельной песни. См. [работу жанровых фильтров](genre-filters.md).
 
-## Official references
+В карточке доступна ссылка «Теги и метаданные Last.fm», когда поставщик вернул допустимый адрес страницы трека.
 
-- [track.getInfo](https://www.last.fm/api/show/track.getInfo)
-- [track.getTopTags](https://www.last.fm/api/show/track.getTopTags)
-- [artist.getInfo](https://www.last.fm/api/show/artist.getInfo)
-- [user.getWeeklyArtistChart](https://www.last.fm/api/show/user.getWeeklyArtistChart)
-- [Deprecated Radio API](https://www.last.fm/api/radio)
-- [API terms](https://www.last.fm/api/tos): attribution/catalog links, caching,
-  usage limits, and separate conditions for commercial use.
+## Очередь, кэш и ошибки
+
+Last.fm запрашивается при дополнительном обогащении видимых карточек. Первый запрос обложки и запрос аудио с `details=false` не ждут этих тегов. Ошибка необязательного источника не скрывает уже найденную обложку или запись.
+
+Одинаковые незавершённые запросы объединяются. Результаты находятся в ограниченном кэше памяти экземпляра API: по умолчанию до 3000 записей и до 6 часов, отсутствие совпадения - до 5 минут. Более короткий `Cache-Control: max-age` сокращает срок, а `no-store` и `no-cache` исключают сохранение ответа в этом кэше. Срок действия объединённой записи серверного каталога также ограничивается сроком данных Last.fm. Это не постоянная база метаданных; холодный запуск Vercel начинает с пустого кэша.
+
+Запросы источника разнесены по времени; стандартный интервал приложения - 350 мс в пределах одного экземпляра API. HTTP 429 и ошибка Last.fm 29 вызывают временную паузу с учётом `Retry-After`. Ошибки недействительного или приостановленного ключа также временно блокируют повторные обращения. Эти настройки приложения не являются гарантированной квотой Last.fm и не объединяются между экземплярами Vercel.
+
+## Ограничения
+
+Last.fm не анализирует звучание песни в этой интеграции, не выдаёт полные аудиофайлы и не используется для загрузки изображений. Приложение не сохраняет медиафайлы на компьютере пользователя или на сервере.
+
+Счётчики слушателей и прослушиваний Last.fm относятся к собственной базе сервиса. Они не являются месячной аудиторией Spotify и не подставляются в график роста аудитории Spotify. Эта интеграция также не восстанавливает историю личных прослушиваний: она берётся из загруженного архива. Источники графика аудитории описаны [отдельно](audience-sources.md).
+
+Перед публичным использованием своего ключа ознакомьтесь с [условиями Last.fm API](https://www.last.fm/api/tos). Фактическое покрытие тегами зависит от каталога и активности сообщества; отсутствие жанра сохраняется как неизвестное значение.

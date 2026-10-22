@@ -1,5 +1,4 @@
 import React, { useMemo, useRef, useState } from 'react';
-import { ArrowLeftRight } from 'lucide-react';
 import { number } from '../ui.jsx';
 import { useI18n } from '../lib/i18n-react.jsx';
 
@@ -31,6 +30,5 @@ export default function ActivityChart({months=[]}) {
       {current&&<><span className="chart-crosshair" style={{left:`${(index+.5)/timeline.length*100}%`}}/><div className="chart-tooltip" role="status" style={{left:`clamp(8px, calc(${(index+.5)/timeline.length*100}% - 90px), calc(100% - 188px))`}}><strong>{monthTitle(current.month)}</strong><span><i/>{t('{count} прослушиваний',{count:number(current.plays)})}</span><small>{listeningTime}</small></div></>}
     </div>
     <div className="chart-labels"><span>{timeline[0]?.month.slice(0,4)}</span><span>{timeline[Math.floor(timeline.length/2)]?.month.slice(0,4)}</span><span>{timeline.at(-1)?.month.slice(0,4)}</span></div>
-    <div className="chart-hint"><ArrowLeftRight size={13}/>{t('Наведите на любой участок графика · на телефоне — коснитесь')}</div>
   </div>;
 }
